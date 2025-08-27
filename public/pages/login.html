@@ -1,0 +1,39 @@
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login</title>
+        <script type="module" src="../scripts/pages/login.js"></script>
+    </head>
+    <body>
+        <header>
+            <h1>Iniciar sesión con si ID de estudiante y su contraseña.</h1>
+        </header>
+        <main>
+            <section>
+                <div id="formulario">
+                    <form id="loginForm" method="post" action="#">
+                        <label for="estudianteID ">ID del estudiante.</label>
+                        <input type="text"
+                        id="estudianteID"
+                        name="estudianteID"
+                        placeholder="Escriba su ID"
+                        required
+                        autocomplete="username">
+                        <label for="password">Contraseña.</label>
+                        <input type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Escriba su contraseña"
+                        required
+                        autocomplete="current-password">                    
+                         <button type="button" id="loginBtn">Iniciar sesión</button>
+                         <button type="button" id="regisBtn">Registrarse</button>
+                    </form>
+                </div>
+                <div id="aviso" aria-live="polite"></div>
+            </section>
+        </main>
+    </body>
+    </html>
