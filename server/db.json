@@ -1,14 +1,9 @@
 {
   "users": [
     {
-      "id": "d3aa",
-      "estudianteID": "1",
-      "password": "contraseña1"
-    },
-    {
-      "id": "f14c",
-      "estudianteID": "2",
-      "password": "contraseña2"
+      "id": "3c28",
+      "estudianteID": "admin",
+      "password": "admin"
     }
   ],
   "tickets": [],

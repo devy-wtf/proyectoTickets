@@ -5,10 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Consultas</title>
     <link rel="stylesheet" href="../../styles/index.css">
-    <script type="module" src="../../scripts/pages/index.js"></script>
-
+    <script type="module" src="../../scripts/pages/index.js" defer></script>
 </head>
 <body>
-    
+    <header>
+        <h1>Gestor de Consultas</h1>
+    </header>
+        <main>
+            <section>
+                <div id="consultaSeccion">
+                    <form action="#" id="formConsulta">
+                        <label for="nombreEstudiante">Nombre del Estudiante:</label>
+                        <input type="text"
+                            id="nombreEstudiante"
+                            placeholder="Ingrese su nombre"
+                            required>
+                            <label for="consultaDatos">Datos de la consulta:</label>
+                            <textarea id="consultaDatos"
+                            placeholder="Escriba los datos de su consulta"
+                            required></textarea>
+                            <label for="horaConsulta">Hora y fecha a la que está realizando la consulta:</label>
+                            <input type="datetime-local"
+                            id="horaConsulta"
+                            required>
+                            <small>Selecciona la fecha y hora de tu consulta</small>
+                            <button type="submit" id="sendConsulta">Enviar consulta</button>
+                    </form>
+                        <div id="listaSeccion">
+                            <h2>Lista de consultas realizadas</h2>
+                            <ul id="listaConsultas"></ul>
+                        </div>
+                    <div id="linkStats">
+                        <button type="button" id="statsPagBtn">Estadisticas de las consultas</button>
+                    </div>
+                </div>
+            </section>
+        </main>
 </body>
 </html>
