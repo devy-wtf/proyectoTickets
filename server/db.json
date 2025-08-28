@@ -1,6 +1,16 @@
 {
-    "users":[],
-    "tickets":[],
-    "stats":[]
+  "users": [
+    {
+      "id": "d3aa",
+      "estudianteID": "1",
+      "password": "contraseña1"
+    },
+    {
+      "id": "f14c",
+      "estudianteID": "2",
+      "password": "contraseña2"
+    }
+  ],
+  "tickets": [],
+  "stats": []
 }
-

@@ -25,6 +25,10 @@ export async function registerUser(estudianteID, password) {
         body: JSON.stringify({estudianteID, password})
     })
     
-    if("res.ok") throw new Error('Error al registrar usuario')
-        return res.json()
+  if (!res.ok) {
+    throw new Error('Error al registrar usuario');
+  }
+
+  
+  return res.json();
 }

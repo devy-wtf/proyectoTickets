@@ -21,15 +21,14 @@ loginBtn.addEventListener("click", async() => {
     try{
         const user = await loginUser(estudianteID, password)
         if(user){
-            aviso.textContent= '¡Bienvenido, ${estudianteID}!'
+            aviso.textContent= `¡Bienvenido, ${estudianteID}!`
+            window.location.href = '../../pages/index.html'
         }else{
             aviso.textContent = "Los datos son incorrectos."
         }
-        
-    } catch(Error){
+    } catch(error){
         aviso.textContent = `Error: ${Error.message}`
-    }
-    
+    } 
 })
 
 regisBtn.addEventListener("click", async() => {
@@ -40,11 +39,14 @@ regisBtn.addEventListener("click", async() => {
     try{
         const newUser = await registerUser (estudianteID, password)
         if(newUser){
-            aviso.textContent = '¡Usuario ${newUser.estudianteID} registrado! Ya puedes iniciar sesión.'
+            aviso.textContent = `¡Usuario ${newUser.estudianteID} registrado! Ya puedes iniciar sesión.`
         }
         } catch(Error){
-            aviso.textContent = 'Error: ${Error.message}'
+            aviso.textContent = 'Error: No se ha podido registrar el usuario.'
+        } finally{
+            formulario.reset();
         }
     }
+    
 ) 
  
