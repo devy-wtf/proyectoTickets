@@ -23,10 +23,22 @@
   ],
   "tickets": [
     {
-      "id": "b29b",
-      "nombreEstudiante": null,
-      "consulta": null,
-      "timestamp": "2025-08-29T23:27:52.426Z"
+      "id": "dd04",
+      "nombreEstudiante": "prueba",
+      "consulta": "prueba",
+      "timestamp": "2025-09-01T21:46:07.117Z"
+    },
+    {
+      "id": "b563",
+      "nombreEstudiante": "prueba 2",
+      "consulta": "prueba, again.",
+      "timestamp": "2025-09-01T21:46:25.231Z"
+    },
+    {
+      "id": "3d74",
+      "nombreEstudiante": "hola",
+      "consulta": "prueba",
+      "timestamp": "2025-09-01T21:52:09.124Z"
     }
   ],
   "stats": []
