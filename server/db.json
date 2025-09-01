@@ -4,8 +4,30 @@
       "id": "3c28",
       "estudianteID": "admin",
       "password": "admin"
+    },
+    {
+      "id": "6391",
+      "estudianteID": "barry",
+      "password": "1234"
+    },
+    {
+      "id": "1e16",
+      "estudianteID": "prueba",
+      "password": "123456"
+    },
+    {
+      "id": "a788",
+      "estudianteID": "ola",
+      "password": "ola25"
     }
   ],
-  "tickets": [],
+  "tickets": [
+    {
+      "id": "b29b",
+      "nombreEstudiante": null,
+      "consulta": null,
+      "timestamp": "2025-08-29T23:27:52.426Z"
+    }
+  ],
   "stats": []
 }
