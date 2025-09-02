@@ -5,21 +5,21 @@ import {
   deleteTicket
 } from "../modules/tickets.js";
 
-const formulario     = document.getElementById("formConsulta");
+const formulario  = document.getElementById("formConsulta");
 const listaConsultas = document.getElementById("listaConsultas");
-const enviarBtn      = document.getElementById("sendConsulta");
-const statsBtn       = document.getElementById("toggleStats");
-const statsSidebar   = document.getElementById("statsSidebar");
+const enviarBtn = document.getElementById("sendConsulta");
+const statsBtn  = document.getElementById("toggleStats");
+const statsSidebar = document.getElementById("statsSidebar");
 const statsContainer = document.getElementById("statsContainer");
 
-let editarId   = null;
+let editarId = null;
 let allTickets = [];
 
 function obtenerFormDatos() {
   const formData = new FormData(formulario);
   return {
     nombreEstudiante: formData.get("nombreEstudiante").trim(),
-    consulta:         formData.get("consulta").trim()
+    consulta: formData.get("consulta").trim()
   };
 }
 
