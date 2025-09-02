@@ -5,57 +5,44 @@ import {
   deleteTicket
 } from "../modules/tickets.js";
 
-const formulario     = document.getElementById('formConsulta');
-const listaConsultas = document.getElementById('listaConsultas');
-const enviarBtn      = document.getElementById('sendConsulta');
-const statsBtn       = document.getElementById('toggleStats');
-
-const statsContainer = document.getElementById('statsContainer');
+// 1. Referencias al DOM
+const formulario     = document.getElementById("formConsulta");
+const listaConsultas = document.getElementById("listaConsultas");
+const enviarBtn      = document.getElementById("sendConsulta");
+const statsBtn       = document.getElementById("toggleStats");
+const statsSidebar   = document.getElementById("statsSidebar");
+const statsContainer = document.getElementById("statsContainer");
 
 let editarId   = null;
 let allTickets = [];
 
-
-function obtenerFormDatos(){
+// 2. Extrae los valores del formulario
+function obtenerFormDatos() {
   const formData = new FormData(formulario);
   return {
-    nombreEstudiante: formData.get('nombreEstudiante'),
-    consulta:         formData.get('consulta')
+    nombreEstudiante: formData.get("nombreEstudiante").trim(),
+    consulta:         formData.get("consulta").trim()
   };
 }
 
-
-function renderTickets(tickets){
-  listaConsultas.innerHTML = '';
-
+// 3. Dibuja la lista de consultas
+function renderTickets(tickets) {
+  listaConsultas.innerHTML = "";
   tickets.forEach(ticket => {
-    const li = document.createElement('li');
+    const li = document.createElement("li");
     li.dataset.id = ticket.id;
-
-    const nombre = document.createElement('strong');
-    nombre.textContent = ticket.nombreEstudiante;
-
-    const tiempo = document.createElement('em');
-    tiempo.textContent = new Date(ticket.timestamp).toLocaleString();
-
-    const consulta = document.createElement('p');
-    consulta.textContent = ticket.consulta;
-
-    const editarBtn = document.createElement('button');
-    editarBtn.className = "editarBtn";
-    editarBtn.textContent = "Editar consulta";
-
-    const eliminarBtn = document.createElement('button');
-    eliminarBtn.className = "eliminarBtn";
-    eliminarBtn.textContent = "Eliminar consulta";
-
-    li.append(nombre, tiempo, consulta, editarBtn, eliminarBtn);
+    li.innerHTML = `
+      <strong>${ticket.nombreEstudiante}</strong>
+      <em>${new Date(ticket.timestamp).toLocaleString()}</em>
+      <p>${ticket.consulta}</p>
+      <button class="editarBtn">Editar consulta</button>
+      <button class="eliminarBtn">Eliminar consulta</button>
+    `;
     listaConsultas.appendChild(li);
   });
 }
 
-
-// Agrupa los tickets por fecha (YYYY-MM-DD)
+// 4. Agrupa por día (YYYY-MM-DD)
 function groupByDate(tickets) {
   return tickets.reduce((acc, t) => {
     const day = t.timestamp.slice(0, 10);
@@ -65,60 +52,63 @@ function groupByDate(tickets) {
   }, {});
 }
 
-// Renderiza en statsContainer los últimos 3 días de historial
+// 5. Muestra estadísticas de los últimos 3 días
 function renderStats(tickets) {
   const grouped = groupByDate(tickets);
   const days = Object.keys(grouped)
     .sort((a, b) => b.localeCompare(a))
     .slice(0, 3);
 
-  statsContainer.innerHTML = '';
+  statsContainer.innerHTML = "";
+
+  if (days.length === 0) {
+    statsContainer.innerHTML = `<p class="warning">No hay datos de consultas.</p>`;
+    return;
+  }
 
   days.forEach(day => {
-    const section = document.createElement('div');
-    section.className = 'daySection';
+    const section = document.createElement("div");
+    section.className = "daySection";
 
-    const h2 = document.createElement('h2');
-    h2.textContent = new Date(day).toLocaleDateString();
-    section.appendChild(h2);
+    const header = document.createElement("h2");
+    header.textContent = new Date(day).toLocaleDateString();
+    section.appendChild(header);
 
-    const ul = document.createElement('ul');
-    grouped[day].forEach(t => {
-      const li = document.createElement('li');
-      li.innerHTML = `
-        <strong>${t.nombreEstudiante}</strong>
-        <em>${new Date(t.timestamp).toLocaleTimeString()}</em>
-        <p>${t.consulta}</p>
+    const ul = document.createElement("ul");
+    grouped[day].forEach(ticket => {
+      const item = document.createElement("li");
+      item.innerHTML = `
+        <strong>${ticket.nombreEstudiante}</strong>
+        <em>${new Date(ticket.timestamp).toLocaleTimeString()}</em>
+        <p>${ticket.consulta}</p>
       `;
-      ul.appendChild(li);
+      ul.appendChild(item);
     });
     section.appendChild(ul);
-
     statsContainer.appendChild(section);
   });
 
   if (days.length < 3) {
-    const note = document.createElement('p');
-    note.className = 'warning';
-    note.textContent = 'Menos de 3 días de historial';
+    const note = document.createElement("p");
+    note.className = "warning";
+    note.textContent = "Menos de 3 días de historial";
     statsContainer.appendChild(note);
   }
 }
 
-
-// Carga tickets, renderiza lista y estadísticas
-async function cargarAndRender(){
+// 6. Carga datos y refresca lista + estadísticas
+async function cargarAndRender() {
   try {
     allTickets = await fetchTickets();
     renderTickets(allTickets);
     renderStats(allTickets);
-  } catch(error) {
+  } catch (error) {
     alert(error.message);
   }
 }
 
-
-formulario.addEventListener('submit', async e => {
+// 7a. Envío de formulario
+formulario.addEventListener("submit", async e => {
   e.preventDefault();
   enviarBtn.disabled = true;
   const data = obtenerFormDatos();
@@ -127,11 +117,10 @@ formulario.addEventListener('submit', async e => {
     if (editarId) {
       await updateTicket(editarId, data);
       editarId = null;
-      enviarBtn.textContent = 'Enviar consulta';
+      enviarBtn.textContent = "Enviar consulta";
     } else {
       await addTicket(data);
     }
-
     formulario.reset();
     await cargarAndRender();
   } catch (err) {
@@ -141,39 +130,38 @@ formulario.addEventListener('submit', async e => {
   }
 });
 
-
-listaConsultas.addEventListener("click", async event => {
-  const li = event.target.closest('li');
+// 7b. Delegación: editar / eliminar
+listaConsultas.addEventListener("click", async e => {
+  const li = e.target.closest("li");
   if (!li) return;
   const id = li.dataset.id;
 
-  if (event.target.matches('.editarBtn')) {
-    document.getElementById('nombreEstudiante').value =
-      li.querySelector('strong').textContent;
-    document.getElementById('consulta').value =
-      li.querySelector('p').textContent;
+  if (e.target.matches(".editarBtn")) {
+    document.getElementById("nombreEstudiante").value =
+      li.querySelector("strong").textContent;
+    document.getElementById("consulta").value =
+      li.querySelector("p").textContent;
     enviarBtn.textContent = "Actualizar consulta";
     editarId = id;
   }
 
-  if (event.target.matches('.eliminarBtn')) {
-    if (confirm('¿Estás seguro que quieres eliminar esta consulta?')) {
+  if (e.target.matches(".eliminarBtn")) {
+    if (confirm("¿Estás seguro que quieres eliminar esta consulta?")) {
       try {
         await deleteTicket(id);
         await cargarAndRender();
-      } catch (error) {
-        alert(error.message);
+      } catch (err) {
+        alert(err.message);
       }
     }
   }
 });
 
-
-statsBtn.addEventListener('click', () => {
-  statsContainer.classList.toggle('hidden');
+// 7c. Toggle del sidebar de estadísticas
+statsBtn.addEventListener("click", () => {
+  statsSidebar.classList.toggle("collapsed");
 });
 
-
+// 8. Inicializa y refresca cada 10s
 cargarAndRender();
 setInterval(cargarAndRender, 10000);
-
