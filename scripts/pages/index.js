@@ -5,7 +5,6 @@ import {
   deleteTicket
 } from "../modules/tickets.js";
 
-// 1. Referencias al DOM
 const formulario     = document.getElementById("formConsulta");
 const listaConsultas = document.getElementById("listaConsultas");
 const enviarBtn      = document.getElementById("sendConsulta");
@@ -16,7 +15,6 @@ const statsContainer = document.getElementById("statsContainer");
 let editarId   = null;
 let allTickets = [];
 
-// 2. Extrae los valores del formulario
 function obtenerFormDatos() {
   const formData = new FormData(formulario);
   return {
@@ -25,7 +23,6 @@ function obtenerFormDatos() {
   };
 }
 
-// 3. Dibuja la lista de consultas
 function renderTickets(tickets) {
   listaConsultas.innerHTML = "";
   tickets.forEach(ticket => {
@@ -42,7 +39,6 @@ function renderTickets(tickets) {
   });
 }
 
-// 4. Agrupa por día (YYYY-MM-DD)
 function groupByDate(tickets) {
   return tickets.reduce((acc, t) => {
     const day = t.timestamp.slice(0, 10);
@@ -52,7 +48,6 @@ function groupByDate(tickets) {
   }, {});
 }
 
-// 5. Muestra estadísticas de los últimos 3 días
 function renderStats(tickets) {
   const grouped = groupByDate(tickets);
   const days = Object.keys(grouped)
@@ -96,7 +91,6 @@ function renderStats(tickets) {
   }
 }
 
-// 6. Carga datos y refresca lista + estadísticas
 async function cargarAndRender() {
   try {
     allTickets = await fetchTickets();
@@ -107,7 +101,6 @@ async function cargarAndRender() {
   }
 }
 
-// 7a. Envío de formulario
 formulario.addEventListener("submit", async e => {
   e.preventDefault();
   enviarBtn.disabled = true;
@@ -130,7 +123,6 @@ formulario.addEventListener("submit", async e => {
   }
 });
 
-// 7b. Delegación: editar / eliminar
 listaConsultas.addEventListener("click", async e => {
   const li = e.target.closest("li");
   if (!li) return;
@@ -157,11 +149,9 @@ listaConsultas.addEventListener("click", async e => {
   }
 });
 
-// 7c. Toggle del sidebar de estadísticas
 statsBtn.addEventListener("click", () => {
   statsSidebar.classList.toggle("collapsed");
 });
 
-// 8. Inicializa y refresca cada 10s
 cargarAndRender();
 setInterval(cargarAndRender, 10000);
